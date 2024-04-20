@@ -10,5 +10,6 @@ class Room:
         self.comfort = txt_info[3]
         self.price = Room.room_price[self.type] * Room.comfort_factor[self.comfort] * self.capacity
         self.discount_price = self.price * 0.7
+        self.occupied_dates = []
         Room.all_rooms.append(self)
 

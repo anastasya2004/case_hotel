@@ -8,4 +8,17 @@ class Client:
         self.arriving = txt_info[5]
         self.days = int(txt_info[6])
         self.money_to_spend = int(txt_info[7]) * self.guests
+        self.dates_to_rent = self.rental_days()
         Client.all_clients.append(self)
+
+    def rental_days(self):
+        dates = []
+        arrival_day = list(map(int, self.arriving.split('.')))
+        for i in range(self.days):
+            dates.append([arrival_day[0] + i, arrival_day[1], arrival_day[2]])
+        dates = [f'{day:02d}.{month:02d}.{year}' for day, month, year in dates]
+        return dates
+
+
+
+
