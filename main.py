@@ -7,7 +7,7 @@ with open('fund.txt', 'r', encoding='utf-8') as info:
 
 with open('booking.txt', 'r', encoding='utf-8') as info:
     for line in info:
-        client = Client(line.split())
+        client_id = Client(line.split())
 '''
 Получаем информацию о уникальных датах, в которых было совершено бронирование,
 то есть даты 01.03.2020 - 10.03.2020, чтобы бежать по ним общим циклом,
@@ -29,4 +29,7 @@ analyzed_dates = Client.dates_to_modeling()
 '''
 for day in analyzed_dates:
     day_clients = [client for client in Client.all_clients if client.booking_date == day]
+    for certain_client in day_clients:
+
+
 

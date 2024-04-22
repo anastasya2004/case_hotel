@@ -13,3 +13,13 @@ class Room:
         self.occupied_dates = []
         Room.all_rooms.append(self)
 
+    '''
+    недоделанный метод выбора комнаты под параметры клиента
+    '''
+    @classmethod
+    def room_selection(cls, guests, rental_days, price):
+        suitable_iter_1 = []
+        for room in Room.all_rooms:
+            if room.capacity == guests:
+                suitable_variants.append(room)
+
