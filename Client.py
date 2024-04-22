@@ -2,7 +2,7 @@ class Client:
     all_clients = []
 
     def __init__(self, txt_info):
-        self.booking_gate = txt_info[0]
+        self.booking_date = txt_info[0]
         self.name = ' '.join(txt_info[1:4])
         self.guests = int(txt_info[4])
         self.arriving = txt_info[5]
@@ -19,6 +19,10 @@ class Client:
         dates = [f'{day:02d}.{month:02d}.{year}' for day, month, year in dates]
         return dates
 
-
-
-
+    @classmethod
+    def dates_to_modeling(cls):
+        dates_to_modeling = []
+        for order in Client.all_clients:
+            dates_to_modeling.append(order.booking_date)
+        dates_to_modeling = set(dates_to_modeling)
+        return sorted(dates_to_modeling)
