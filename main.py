@@ -13,12 +13,16 @@ with open('booking.txt', 'r', encoding='utf-8') as info:
 analyzed_dates = Client.dates_to_modeling()
 
 for day in analyzed_dates:
+    income = 0
+    lost_income = 0
     day_clients = [client for client in Client.all_clients if client.booking_date == day]
+    print('~' * 100)
     for certain_client in day_clients:
         chosen_room_tuple = Room.room_selection(certain_client.guests, certain_client.rental_days(),
                                                 certain_client.money_to_spend)
         if chosen_room_tuple:
             probability = chosen_room_tuple[2]
+            income += chosen_room_tuple[1]
             print('Поступила заявка на бронирование:')
             print(certain_client)
             print('Найден:')
@@ -26,12 +30,26 @@ for day in analyzed_dates:
                   f'рассчитан на {chosen_room_tuple[0].capacity} человека стоимость {chosen_room_tuple[0].price}')
             if probability == 2:
                 print('Клиент отказался от бронирования')
-            print()
+                lost_income += chosen_room_tuple[1]
+            print('~' * 100)
         else:
             print('Поступила заявка на бронирование:')
             print(certain_client)
             print('Свободных номеров нет. В бронировании отказано.')
-            print()
+            print('~' * 100)
+
+    print('/' * 100)
+    print(f'Отчет за {day}')
+    print(f'Количество занятых номеров {Room.busy_rooms(day)}')
+    print(f'Количество свободных номеров {len(Room.all_rooms) - Room.busy_rooms(day)}')
+    print(f'Процент загруженности одноместных номеров: {Room.busy_certain_type('одноместный', day)}%')
+    print(f'Процент загруженности двухместный номеров: {Room.busy_certain_type('двухместный', day)}%')
+    print(f'Процент загруженности полулюкс номеров: {Room.busy_certain_type('полулюкс', day)}%')
+    print(f'Процент загруженности люкс номеров: {Room.busy_certain_type('люкс', day)}%')
+    print(f'Процент загруженности гостиницы {round(Room.busy_rooms(day) / len(Room.all_rooms) * 100, 2)}%')
+    print(f'Полученный доход за день: {income}')
+    print(f'Упущенный доход за день: {lost_income}')
+    print('/' * 100)
 
     for apart in Room.all_rooms:
         if day in apart.occupied_dates:

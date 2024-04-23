@@ -1,4 +1,6 @@
 import random
+
+
 class Room:
     comfort_factor = {'стандарт': 1, 'стандарт_улучшенный': 1.2, 'апартамент': 1.5}
     room_price = {'одноместный': 2900, 'двухместный': 2300, 'полулюкс': 3200, 'люкс': 4100}
@@ -74,3 +76,21 @@ class Room:
                     return None
         else:
             return None
+
+    @classmethod
+    def busy_rooms(cls, day):
+        amount = 0
+        for room in Room.all_rooms:
+            if day in room.occupied_dates:
+                amount += 1
+        return amount
+
+    @classmethod
+    def busy_certain_type(cls, type_comfort, day):
+        busy = []
+        for room in Room.all_rooms:
+            if day in room.occupied_dates:
+                if room.type == type_comfort:
+                    busy.append(room)
+        result = len(busy) / len(Room.all_rooms)
+        return round(result * 100, 2)
