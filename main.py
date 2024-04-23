@@ -39,15 +39,15 @@ for day in analyzed_dates:
             print(certain_client)
             print('Найден:')
             print(f'Номер {chosen_room_tuple[0].number} {chosen_room_tuple[0].type} {chosen_room_tuple[0].comfort} '
-                  f'рассчитан на {chosen_room_tuple[0].capacity} человека стоимость {chosen_room_tuple[0].price}')
+                  f'рассчитан на {chosen_room_tuple[0].capacity} человек стоимость {chosen_room_tuple[0].price}')
             if probability == 2:
                 print('Клиент отказался от бронирования')
-                lost_income += chosen_room_tuple[1]
             print('~' * 100)
         else:
             print('Поступила заявка на бронирование:')
             print(certain_client)
             print('Свободных номеров нет. В бронировании отказано.')
+            lost_income += certain_client.money_to_spend
             print('~' * 100)
 
     # Printing the daily report
