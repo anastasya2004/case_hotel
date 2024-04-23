@@ -30,9 +30,9 @@ analyzed_dates = Client.dates_to_modeling()
 for day in analyzed_dates:
     day_clients = [client for client in Client.all_clients if client.booking_date == day]
     for certain_client in day_clients:
-        chosen_room = Room.room_selection(certain_client.guests, certain_client.rental_days())
-        for i in chosen_room:
-            print(i.number)
-        break
+        chosen_room_tuple = Room.room_selection(certain_client.guests, certain_client.rental_days(),
+                                                certain_client.money_to_spend)
+        print(chosen_room_tuple)
+        if chosen_room_tuple:
+            print(chosen_room_tuple[0].number)
     break
-#последний цикл for написан просто для проверки правильности работы метода
