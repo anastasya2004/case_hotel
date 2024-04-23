@@ -39,8 +39,9 @@ class Room:
             if best_price:
                 for i in suitable_iter_1:
                     if i.price <= best_price:
-                        for j in rental_days:
-                            i.occupied_dates.append(j)
+                        if factor != 2:
+                            for j in rental_days:
+                                i.occupied_dates.append(j)
                         return i, best_price, factor
             else:
                 return None
@@ -65,8 +66,9 @@ class Room:
                 if best_price:
                     for i in suitable_iter_2:
                         if i.discount_price <= best_price:
-                            for j in rental_days:
-                                i.occupied_dates.append(j)
+                            if factor != 2:
+                                for j in rental_days:
+                                    i.occupied_dates.append(j)
                             return i, best_price, factor
                 else:
                     return None

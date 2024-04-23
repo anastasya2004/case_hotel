@@ -28,5 +28,5 @@ class Client:
         return sorted(dates_to_modeling)
 
     def __str__(self):
-        return (f'{self.booking_date} {self.name} {self.guests}'
+        return (f'{self.booking_date} {self.name} {self.guests} {self.arriving}'
                 f' {self.days} {self.money_to_spend / self.guests}')
