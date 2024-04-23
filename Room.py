@@ -15,65 +15,57 @@ class Room:
         self.occupied_dates = []
         Room.all_rooms.append(self)
 
-    @staticmethod
-    def best_price(room_price, comfort, food, max_price):
-        best_result = room_price
-        best_diff = abs(room_price - max_price)
-        if max_price >= room_price:
-            for coef in comfort:
-                for num in list(food.values()):
-                    new_result = room_price * coef + num
-                    new_diff = abs(new_result - max_price)
-
-                    if new_result <= max_price and new_diff <= best_diff:
-                        best_result = new_result
-                        best_diff = new_diff
-                        comfort_type = coef
-            return best_result, comfort_type
-        else:
-            return None
-
-    '''
-    недоделанный метод выбора комнаты под параметры клиента,
-    нужно будет разобраться что делать, если количество гостей = 4
-    '''
-
     @classmethod
     def room_selection(cls, guests, rental_days, money):
         suitable_iter_1 = [room for room in Room.all_rooms if room.capacity == guests
                            and not any(dates in rental_days for dates in room.occupied_dates)]
+        suitable_iter_1 = sorted(suitable_iter_1, key=lambda room: room.price, reverse=True)
         if suitable_iter_1:
-            coefs = []
-            for rm in suitable_iter_1:
-                coefs.append(rm.comfort_coef)
-            coefs = list(set(coefs))
-            info_tuple = Room.best_price(suitable_iter_1[0].price, coefs,
-                                         Room.food_type, money)
-            if info_tuple:
-                best_price, comfort_coef = info_tuple[0], info_tuple[1]
-                for apart in suitable_iter_1:
-                    if apart.comfort_coef == comfort_coef:
-                        for day in rental_days:
-                            apart.occupied_dates.append(day)
-                        return apart, best_price
+            all_prices = []
+            best_price = None
+            for i in suitable_iter_1:
+                all_prices.append(i.price)
+            for i in suitable_iter_1:
+                all_prices.append(i.price + Room.food_type['завтрак'])
+            for i in suitable_iter_1:
+                all_prices.append(i.price + Room.food_type['полупансион'])
+            all_prices.sort(reverse=True)
+            for i in all_prices:
+                if i < money:
+                    best_price = i
+                    break
+            if best_price:
+                for i in suitable_iter_1:
+                    if i.price <= best_price:
+                        for j in rental_days:
+                            i.occupied_dates.append(j)
+                        return i, best_price
             else:
                 return None
         elif not suitable_iter_1:
             suitable_iter_2 = [room for room in Room.all_rooms if room.capacity == guests + 1
                                and not any(dates in rental_days for dates in room.occupied_dates)]
+            suitable_iter_2 = sorted(suitable_iter_2, key=lambda room: room.discount_price, reverse=True)
             if suitable_iter_2:
-                coefs = []
-                for rm in suitable_iter_2:
-                    coefs.append(rm.comfort_coef)
-                coefs = list(set(coefs))
-                info_tuple = Room.best_price(suitable_iter_2[0].discount_price, coefs,
-                                             Room.food_type, money)
-                if info_tuple:
-                    best_price, comfort_coef = info_tuple[0], info_tuple[1]
-                    for apart in suitable_iter_2:
-                        if apart.comfort_coef == comfort_coef:
-                            apart.occupied_dates.append(rental_days)
-                            return apart, best_price
+                all_prices = []
+                best_price = None
+                for i in suitable_iter_2:
+                    all_prices.append(i.discount_price)
+                for i in suitable_iter_2:
+                    all_prices.append(i.discount_price + Room.food_type['завтрак'])
+                for i in suitable_iter_2:
+                    all_prices.append(i.discount_price + Room.food_type['полупансион'])
+                all_prices.sort(reverse=True)
+                for i in all_prices:
+                    if i < money:
+                        best_price = i
+                        break
+                if best_price:
+                    for i in suitable_iter_2:
+                        if i.discount_price <= best_price:
+                            for j in rental_days:
+                                i.occupied_dates.append(j)
+                            return i, best_price
                 else:
                     return None
         else:

@@ -14,7 +14,7 @@ class Client:
     def rental_days(self):
         dates = []
         arrival_day = list(map(int, self.arriving.split('.')))
-        for i in range(self.days):
+        for i in range(self.days + 1):
             dates.append([arrival_day[0] + i, arrival_day[1], arrival_day[2]])
         dates = [f'{day:02d}.{month:02d}.{year}' for day, month, year in dates]
         return dates
