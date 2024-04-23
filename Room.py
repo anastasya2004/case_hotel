@@ -1,3 +1,4 @@
+import random
 class Room:
     comfort_factor = {'стандарт': 1, 'стандарт_улучшенный': 1.2, 'апартамент': 1.5}
     room_price = {'одноместный': 2900, 'двухместный': 2300, 'полулюкс': 3200, 'люкс': 4100}
@@ -17,6 +18,7 @@ class Room:
 
     @classmethod
     def room_selection(cls, guests, rental_days, money):
+        factor = random.randint(1, 4)
         suitable_iter_1 = [room for room in Room.all_rooms if room.capacity == guests
                            and not any(dates in rental_days for dates in room.occupied_dates)]
         suitable_iter_1 = sorted(suitable_iter_1, key=lambda room: room.price, reverse=True)
@@ -39,7 +41,7 @@ class Room:
                     if i.price <= best_price:
                         for j in rental_days:
                             i.occupied_dates.append(j)
-                        return i, best_price
+                        return i, best_price, factor
             else:
                 return None
         elif not suitable_iter_1:
@@ -65,7 +67,7 @@ class Room:
                         if i.discount_price <= best_price:
                             for j in rental_days:
                                 i.occupied_dates.append(j)
-                            return i, best_price
+                            return i, best_price, factor
                 else:
                     return None
         else:

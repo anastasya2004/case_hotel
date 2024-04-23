@@ -26,3 +26,7 @@ class Client:
             dates_to_modeling.append(order.booking_date)
         dates_to_modeling = set(dates_to_modeling)
         return sorted(dates_to_modeling)
+
+    def __str__(self):
+        return (f'{self.booking_date} {self.name} {self.guests}'
+                f' {self.days} {self.money_to_spend / self.guests}')
